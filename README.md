@@ -33,7 +33,7 @@ Gestaltet den Storefront-Footer von Shopware 6.7 frei: eigene Bereiche mit
 Texten und Bildern, dazu alle Standard-Teile von Shopware, die sich
 verschieben, verbreitern, bearbeiten oder ausblenden lassen.
 
-**Aufruf:** Inhalte › DMX4ALL Footer Editor
+**Aufruf:** Inhalte › Shopware Footer Editor
 
 ## Layouts
 
