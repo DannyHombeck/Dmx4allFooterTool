@@ -1,4 +1,4 @@
-# DMX4ALL Footer Editor
+# Shopware Footer Editor
 
 **Der Footer deines Shops – so, wie du ihn haben möchtest.**
 
