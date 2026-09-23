@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Standardwerte der Anordnung. Bearbeitet werden sie im Footer Editor
+    (Karte "Anordnung im Footer"); die Einstellungsseite zeigt diese Felder
+    nicht mehr an. Die Datei bleibt, damit Shopware bei der Installation die
+    Standardwerte setzt.
+
+    Sprachen: Ein Eintrag ohne lang-Attribut ist bei Shopware Englisch (en-GB),
+    Deutsch steht jeweils mit lang="de-DE" darunter.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title>Footer display</title>
+        <title lang="de-DE">Darstellung im Footer</title>
+
+        <input-field type="bool">
+            <name>active</name>
+            <label>Show custom footer</label>
+            <label lang="de-DE">Eigenen Footer anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>placement</name>
+            <label>Position</label>
+            <label lang="de-DE">Position</label>
+            <defaultValue>inline</defaultValue>
+            <options>
+                <option>
+                    <id>inline</id>
+                    <name>Next to default columns</name>
+                    <name lang="de-DE">Neben den Standard-Spalten</name>
+                </option>
+                <option>
+                    <id>replace</id>
+                    <name>Replace default columns</name>
+                    <name lang="de-DE">Standard-Spalten ersetzen</name>
+                </option>
+                <option>
+                    <id>before</id>
+                    <name>Above default columns</name>
+                    <name lang="de-DE">Über den Standard-Spalten</name>
+                </option>
+                <option>
+                    <id>after</id>
+                    <name>Below default columns</name>
+                    <name lang="de-DE">Unter den Standard-Spalten</name>
+                </option>
+            </options>
+            <helpText>"Next to default columns": all columns (own areas, hotline, navigation, logos, bottom bar) are positioned freely in the Footer Editor. "Replace" hides the hotline and footer navigation.</helpText>
+            <helpText lang="de-DE">„Neben den Standard-Spalten“: Alle Spalten (eigene Bereiche, Hotline, Navigation, Logos, Fußleiste) werden im Footer Editor frei positioniert. „Ersetzen“ blendet Hotline und Footer-Navigation aus.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showHotline</name>
+            <label>Show service hotline</label>
+            <label lang="de-DE">Service-Hotline anzeigen</label>
+            <defaultValue>true</defaultValue>
+            <helpText>Only with "Above" or "Below default columns". With "Next to default columns" the hotline is positioned or hidden directly in the Footer Editor.</helpText>
+            <helpText lang="de-DE">Nur bei „Über“ oder „Unter den Standard-Spalten“. Bei „Neben den Standard-Spalten“ wird die Hotline direkt im Footer Editor positioniert oder ausgeblendet.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showNavigation</name>
+            <label>Show footer navigation</label>
+            <label lang="de-DE">Footer-Navigation anzeigen</label>
+            <defaultValue>true</defaultValue>
+            <helpText>Only with "Above" or "Below default columns". With "Next to default columns" each navigation column is positioned or hidden directly in the Footer Editor.</helpText>
+            <helpText lang="de-DE">Nur bei „Über“ oder „Unter den Standard-Spalten“. Bei „Neben den Standard-Spalten“ wird jede Navigationsspalte direkt im Footer Editor positioniert oder ausgeblendet.</helpText>
+        </input-field>
+
+        <input-field type="int">
+            <name>columnsDesktop</name>
+            <label>Columns on desktop</label>
+            <label lang="de-DE">Spalten am Desktop</label>
+            <defaultValue>4</defaultValue>
+            <min>1</min>
+            <max>12</max>
+            <helpText>With "Next to default columns" the number applies to all columns of the footer row, including hotline and navigation.</helpText>
+            <helpText lang="de-DE">Bei „Neben den Standard-Spalten“ gilt die Anzahl für alle Spalten der Footer-Zeile, auch für Hotline und Navigation.</helpText>
+        </input-field>
+
+        <input-field type="int">
+            <name>columnsTablet</name>
+            <label>Columns on tablet</label>
+            <label lang="de-DE">Spalten am Tablet</label>
+            <defaultValue>2</defaultValue>
+            <min>1</min>
+            <max>12</max>
+        </input-field>
+
+        <input-field type="int">
+            <name>columnsMobile</name>
+            <label>Columns on smartphone</label>
+            <label lang="de-DE">Spalten am Smartphone</label>
+            <defaultValue>1</defaultValue>
+            <min>1</min>
+            <max>12</max>
+        </input-field>
+
+        <input-field type="bool">
+            <name>hideEmptyAreas</name>
+            <label>Hide empty areas</label>
+            <label lang="de-DE">Leere Bereiche ausblenden</label>
+            <defaultValue>false</defaultValue>
+            <helpText>Off: empty areas remain as a gap so the columns keep their position. With "Next to default columns" empty areas are always skipped.</helpText>
+            <helpText lang="de-DE">Aus: Leere Bereiche bleiben als Lücke stehen, damit die Spalten ihre Position behalten. Bei „Neben den Standard-Spalten“ entfallen leere Bereiche immer.</helpText>
+        </input-field>
+    </card>
+</config>

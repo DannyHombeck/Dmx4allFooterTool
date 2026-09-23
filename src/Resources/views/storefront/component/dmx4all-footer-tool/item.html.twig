@@ -1,0 +1,59 @@
+{# Ein einzelnes Element (Text oder Bild) eines Footer-Bereichs #}
+{% if item.type == 'text' %}
+    {% block dmx4all_footer_tool_text %}
+        <div class="dmx4all-footer-tool__text">
+            {{ item.content|sw_sanitize }}
+        </div>
+    {% endblock %}
+{% elseif item.type == 'image' and item.media %}
+    {% block dmx4all_footer_tool_image %}
+        {% set alt = item.alt ?: (item.media.translated.alt ?: '') %}
+
+        {#
+            Groesse: Breite (px oder %) sitzt auf der Huelle, das Bild fuellt sie.
+            Nur Hoehe: Breite automatisch. Beide: Bild wird eingepasst (object-fit).
+            Breiter als die Spalte wird es durch max-width:100% nie.
+        #}
+        {% set boxStyle = item.width ? 'width:' ~ item.width ~ item.widthUnit ~ ';' : '' %}
+        {% set imageStyle = (item.width ? 'width:100%;' : '')
+            ~ (item.height ? 'height:' ~ item.height ~ 'px;object-fit:contain;' ~ (item.width ? '' : 'width:auto;') : '') %}
+
+        <div class="dmx4all-footer-tool__image is--{{ item.align }}">
+            {% if item.link %}
+                <a class="dmx4all-footer-tool__box"
+                   href="{{ item.link }}"
+                   {% if item.newTab %}target="_blank" rel="noopener noreferrer"{% endif %}
+                   style="{{ boxStyle }}">
+            {% else %}
+                <span class="dmx4all-footer-tool__box" style="{{ boxStyle }}">
+            {% endif %}
+
+            {% sw_thumbnails 'dmx4all-footer-tool-image' with {
+                media: item.media,
+                sizes: {
+                    'xs': '50vw',
+                    'sm': '50vw',
+                    'md': '33vw',
+                    'lg': '25vw',
+                    'xl': item.width and item.widthUnit == 'px' ? item.width ~ 'px' : '300px'
+                },
+                attributes: {
+                    'class': 'dmx4all-footer-tool__img',
+                    'alt': alt,
+                    'title': item.media.translated.title ?: alt,
+                    'loading': 'lazy',
+                    'style': imageStyle
+                }
+            } %}
+
+            {% if item.link %}
+                    {% if item.newTab %}
+                        <span class="visually-hidden">{{ 'dmx4allFooterTool.opensInNewTab'|trans|sw_sanitize }}</span>
+                    {% endif %}
+                </a>
+            {% else %}
+                </span>
+            {% endif %}
+        </div>
+    {% endblock %}
+{% endif %}

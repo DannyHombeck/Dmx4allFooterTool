@@ -1,0 +1,42 @@
+{
+    "name": "dmx4all/dmx4all-footer-tool",
+    "description": "DMX4ALL Footer Editor: den Shopware-Footer ohne Programmierkenntnisse frei gestalten",
+    "version": "1.16.2",
+    "type": "shopware-platform-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dmx4all GmbH"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "shopware/core": "~6.7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dmx4allFooterTool\\": "src/"
+        }
+    },
+    "extra": {
+        "shopware-plugin-class": "Dmx4allFooterTool\\Dmx4allFooterTool",
+        "plugin-icon": "src/Resources/config/plugin.png",
+        "copyright": "(c) by Dmx4all GmbH",
+        "label": {
+            "de-DE": "DMX4ALL Footer Editor",
+            "en-GB": "DMX4ALL Footer Editor"
+        },
+        "description": {
+            "de-DE": "Gestalte den Footer deines Shops ohne Programmierkenntnisse: eigene Bereiche mit Texten und Bildern, Standard-Teile frei anordnen, Design je Bereich, mehrere Layouts für Aktionen, Verkaufskanäle und Sprachen.",
+            "en-GB": "Design your shop footer without coding: own areas with texts and images, freely arranged default parts, design per area, several layouts for campaigns, sales channels and languages."
+        },
+        "manufacturerLink": {
+            "de-DE": "https://www.dmx4all.de",
+            "en-GB": "https://www.dmx4all.de"
+        },
+        "supportLink": {
+            "de-DE": "https://www.dmx4all.de",
+            "en-GB": "https://www.dmx4all.de"
+        }
+    }
+}

@@ -1,0 +1,307 @@
+{% sw_extends '@Storefront/storefront/layout/footer/footer.html.twig' %}
+
+{#
+    Positionen (Einstellung "placement"):
+      inline  - alle Spalten in einer Zeile (#footerColumns): eigene Bereiche,
+                Service-Hotline und jede Spalte der Footer-Navigation werden
+                per CSS "order" frei angeordnet und koennen breiter sein.
+      replace - eigene Bereiche statt Hotline und Footer-Navigation
+      before  - eigenes Raster ueber der Standard-Zeile
+      after   - eigenes Raster unter der Standard-Zeile
+#}
+{% block layout_footer_navigation %}
+    {% set dmx4allFooterTool = dmx4all_footer_tool() %}
+
+    {# Gemeinsames CSS genau einmal je Seite; der Navigationsblock steht vor allen anderen Teilen #}
+    {% if dmx4allFooterTool is not null %}
+        {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/style.html.twig' %}
+
+        {# Design je Bereich; die Werte sind im LayoutService geprueft #}
+        {% if dmx4allFooterTool.designCss %}
+            <style>{{ dmx4allFooterTool.designCss|raw }}</style>
+        {% endif %}
+    {% endif %}
+
+    {% if dmx4allFooterTool is null or dmx4allFooterTool.placement == 'inline' %}
+        {{ parent() }}
+    {% else %}
+        {% if dmx4allFooterTool.placement == 'after' %}
+            {{ parent() }}
+        {% endif %}
+
+        {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/areas.html.twig' with {
+            footerTool: dmx4allFooterTool
+        } %}
+
+        {% if dmx4allFooterTool.placement == 'before' %}
+            {{ parent() }}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block layout_footer_navigation_hotline %}
+    {% set dmx4allFooterToolHotline = dmx4all_footer_tool() %}
+
+    {% if dmx4allFooterToolHotline is null %}
+        {{ parent() }}
+    {% elseif dmx4allFooterToolHotline.placement == 'inline' %}
+        {% set dmx4allCore = dmx4allFooterToolHotline.core.hotline ?? null %}
+
+        {% if dmx4allCore is null or not dmx4allCore.hidden %}
+            {% set dmx4allCoreStyle = '--dft-order:' ~ (dmx4allCore ? dmx4allCore.order : 0)
+                ~ ';--dft-span-lg:' ~ (dmx4allCore ? dmx4allCore.spanDesktop : 1)
+                ~ ';--dft-span-md:' ~ (dmx4allCore ? dmx4allCore.spanTablet : 1)
+                ~ ';--dft-span-sm:' ~ (dmx4allCore ? dmx4allCore.spanMobile : 1) ~ ';' %}
+            <div class="dmx4all-footer-tool__core {{ dmx4allCore.designClass|default('') }}" style="display:contents;{{ dmx4allCoreStyle }}">
+                {{ parent() }}
+            </div>
+        {% endif %}
+    {% elseif dmx4allFooterToolHotline.showHotline %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block layout_footer_navigation_column %}
+    {% set dmx4allFooterToolNav = dmx4all_footer_tool() %}
+
+    {% if dmx4allFooterToolNav is null or dmx4allFooterToolNav.placement != 'inline' %}
+        {{ parent() }}
+    {% else %}
+        {% set dmx4allCore = dmx4allFooterToolNav.core['nav-' ~ loop.index] ?? dmx4allFooterToolNav.core.nav ?? null %}
+
+        {% if dmx4allCore is null or not dmx4allCore.hidden %}
+            {% set dmx4allCoreStyle = '--dft-order:' ~ (dmx4allCore ? dmx4allCore.order : 99999)
+                ~ ';--dft-span-lg:' ~ (dmx4allCore ? dmx4allCore.spanDesktop : 1)
+                ~ ';--dft-span-md:' ~ (dmx4allCore ? dmx4allCore.spanTablet : 1)
+                ~ ';--dft-span-sm:' ~ (dmx4allCore ? dmx4allCore.spanMobile : 1) ~ ';' %}
+            <div class="dmx4all-footer-tool__core {{ dmx4allCore.designClass|default('') }}" style="display:contents;{{ dmx4allCoreStyle }}">
+                {{ parent() }}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{#
+    Inhalt der Standard-Spalten (nur bei "Neben den Standard-Spalten"):
+      mode default - Inhalt von Shopware
+      mode append  - Inhalt von Shopware, darunter eigene Elemente
+      mode replace - nur eigene Elemente
+    headline ueberschreibt die Ueberschrift von Hotline und Navigationsspalten.
+#}
+{% block layout_footer_navigation_hotline_headline %}
+    {% set dmx4allToolH = dmx4all_footer_tool() %}
+    {% set dmx4allCoreH = dmx4allToolH is not null and dmx4allToolH.placement == 'inline' ? (dmx4allToolH.core.hotline ?? null) : null %}
+
+    {% if dmx4allCoreH is null or dmx4allCoreH.headline is empty %}
+        {{ parent() }}
+    {% else %}
+        <div class="footer-column-headline footer-headline js-footer-column-headline"
+             id="collapseFooterHotlineTitle"
+             role="listitem">
+            {{ dmx4allCoreH.headline }}
+
+            {{ block('layout_footer_navigation_hotline_icons') }}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block layout_footer_navigation_hotline_content %}
+    {% set dmx4allToolHc = dmx4all_footer_tool() %}
+    {% set dmx4allCoreHc = dmx4allToolHc is not null and dmx4allToolHc.placement == 'inline' ? (dmx4allToolHc.core.hotline ?? null) : null %}
+
+    {% if dmx4allCoreHc is null or dmx4allCoreHc.mode == 'default' %}
+        {{ parent() }}
+    {% elseif dmx4allCoreHc.mode == 'append' %}
+        {{ parent() }}
+        {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/core-items.html.twig' with { items: dmx4allCoreHc.items } %}
+    {% else %}
+        <div id="collapseFooterHotline"
+             class="footer-column-content collapse js-footer-column-content footer-contact mb-4 mb-md-0"
+             aria-labelledby="collapseFooterHotlineTitle"
+             role="listitem">
+            <div class="footer-column-content-inner">
+                {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/core-items.html.twig' with { items: dmx4allCoreHc.items } %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block layout_footer_navigation_information_headline %}
+    {% set dmx4allToolN = dmx4all_footer_tool() %}
+    {% set dmx4allCoreN = dmx4allToolN is not null and dmx4allToolN.placement == 'inline'
+        ? (dmx4allToolN.core['nav-' ~ loop.index] ?? dmx4allToolN.core.nav ?? null) : null %}
+
+    {% if dmx4allCoreN is null or dmx4allCoreN.headline is empty %}
+        {{ parent() }}
+    {% else %}
+        <div class="footer-column-headline footer-headline js-footer-column-headline"
+             id="collapseFooterTitle{{ loop.index }}"
+             role="listitem">
+            {{ dmx4allCoreN.headline }}
+
+            {{ block('layout_footer_navigation_information_icons') }}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block layout_footer_navigation_information_links %}
+    {% set dmx4allToolNl = dmx4all_footer_tool() %}
+    {% set dmx4allCoreNl = dmx4allToolNl is not null and dmx4allToolNl.placement == 'inline'
+        ? (dmx4allToolNl.core['nav-' ~ loop.index] ?? dmx4allToolNl.core.nav ?? null) : null %}
+
+    {% if dmx4allCoreNl is null or dmx4allCoreNl.mode != 'replace' %}
+        {{ parent() }}
+    {% endif %}
+
+    {% if dmx4allCoreNl is not null and dmx4allCoreNl.mode != 'default' %}
+        {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/core-items.html.twig' with { items: dmx4allCoreNl.items } %}
+    {% endif %}
+{% endblock %}
+
+{#
+    Zahlungslogos, Versandlogos, Service-Menue, MwSt.-Hinweis und Copyright.
+    Bei "Neben den Standard-Spalten" ist jeder Teil einzeln ausblendbar,
+    im Inhalt aenderbar (mode) und kann in die Spaltenzeile wandern (inRow).
+    In der Zeile rendert layout_footer_navigation_columns den Teil per block()
+    nach; dmx4allFooterToolMoving enthaelt dabei den Schluessel des Teils.
+#}
+
+{% block layout_footer_payment_logos %}
+    {% set dftPaymentTool = dmx4all_footer_tool() %}
+    {% set dftPaymentCore = dftPaymentTool is not null and dftPaymentTool.placement == 'inline' ? (dftPaymentTool.core.payment ?? null) : null %}
+
+    {% if dftPaymentCore is null %}
+        {{ parent() }}
+    {% elseif dmx4allFooterToolMoving|default('') == 'payment' or (not dftPaymentCore.hidden and not dftPaymentCore.inRow) %}
+        {% if dftPaymentCore.mode != 'replace' %}
+            {{ parent() }}
+        {% endif %}
+
+        {% if dftPaymentCore.mode != 'default' %}
+            {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/core-items.html.twig' with { items: dftPaymentCore.items } %}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block layout_footer_shipping_logos %}
+    {% set dftShippingTool = dmx4all_footer_tool() %}
+    {% set dftShippingCore = dftShippingTool is not null and dftShippingTool.placement == 'inline' ? (dftShippingTool.core.shipping ?? null) : null %}
+
+    {% if dftShippingCore is null %}
+        {{ parent() }}
+    {% elseif dmx4allFooterToolMoving|default('') == 'shipping' or (not dftShippingCore.hidden and not dftShippingCore.inRow) %}
+        {% if dftShippingCore.mode != 'replace' %}
+            {{ parent() }}
+        {% endif %}
+
+        {% if dftShippingCore.mode != 'default' %}
+            {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/core-items.html.twig' with { items: dftShippingCore.items } %}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block layout_footer_service_menu %}
+    {% set dftServicemenuTool = dmx4all_footer_tool() %}
+    {% set dftServicemenuCore = dftServicemenuTool is not null and dftServicemenuTool.placement == 'inline' ? (dftServicemenuTool.core.servicemenu ?? null) : null %}
+
+    {% if dftServicemenuCore is null %}
+        {{ parent() }}
+    {% elseif dmx4allFooterToolMoving|default('') == 'servicemenu' or (not dftServicemenuCore.hidden and not dftServicemenuCore.inRow) %}
+        {% if dftServicemenuCore.mode != 'replace' %}
+            {{ parent() }}
+        {% endif %}
+
+        {% if dftServicemenuCore.mode != 'default' %}
+            {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/core-items.html.twig' with { items: dftServicemenuCore.items } %}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block layout_footer_vat %}
+    {% set dftVatTool = dmx4all_footer_tool() %}
+    {% set dftVatCore = dftVatTool is not null and dftVatTool.placement == 'inline' ? (dftVatTool.core.vat ?? null) : null %}
+
+    {% if dftVatCore is null %}
+        {{ parent() }}
+    {% elseif dmx4allFooterToolMoving|default('') == 'vat' or (not dftVatCore.hidden and not dftVatCore.inRow) %}
+        {% if dftVatCore.mode != 'replace' %}
+            {{ parent() }}
+        {% endif %}
+
+        {% if dftVatCore.mode != 'default' %}
+            {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/core-items.html.twig' with { items: dftVatCore.items } %}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block layout_footer_copyright %}
+    {% set dftCopyrightTool = dmx4all_footer_tool() %}
+    {% set dftCopyrightCore = dftCopyrightTool is not null and dftCopyrightTool.placement == 'inline' ? (dftCopyrightTool.core.copyright ?? null) : null %}
+
+    {% if dftCopyrightCore is null %}
+        {{ parent() }}
+    {% elseif dmx4allFooterToolMoving|default('') == 'copyright' or (not dftCopyrightCore.hidden and not dftCopyrightCore.inRow) %}
+        {% if dftCopyrightCore.mode != 'replace' %}
+            {{ parent() }}
+        {% endif %}
+
+        {% if dftCopyrightCore.mode != 'default' %}
+            {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/core-items.html.twig' with { items: dftCopyrightCore.items } %}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{# Huelle nur ausgeben, wenn mindestens ein Teil an seinem Standardplatz bleibt #}
+{% block layout_footer_payment_shipping_logos %}
+    {% set dftLogosTool = dmx4all_footer_tool() %}
+
+    {% if dftLogosTool is null or dftLogosTool.placement != 'inline' or (dftLogosTool.core.payment ?? null) is null or not (dftLogosTool.core.payment.hidden or dftLogosTool.core.payment.inRow) or (dftLogosTool.core.shipping ?? null) is null or not (dftLogosTool.core.shipping.hidden or dftLogosTool.core.shipping.inRow) %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{# Huelle nur ausgeben, wenn mindestens ein Teil an seinem Standardplatz bleibt #}
+{% block layout_footer_bottom %}
+    {% set dftBottomTool = dmx4all_footer_tool() %}
+
+    {% if dftBottomTool is null or dftBottomTool.placement != 'inline' or (dftBottomTool.core.servicemenu ?? null) is null or not (dftBottomTool.core.servicemenu.hidden or dftBottomTool.core.servicemenu.inRow) or (dftBottomTool.core.vat ?? null) is null or not (dftBottomTool.core.vat.hidden or dftBottomTool.core.vat.inRow) or (dftBottomTool.core.copyright ?? null) is null or not (dftBottomTool.core.copyright.hidden or dftBottomTool.core.copyright.inRow) %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block layout_footer_navigation_columns %}
+    {% set dmx4allFooterToolColumns = dmx4all_footer_tool() %}
+
+    {% if dmx4allFooterToolColumns is null or dmx4allFooterToolColumns.placement == 'inline' or dmx4allFooterToolColumns.showNavigation %}
+        {{ parent() }}
+    {% endif %}
+
+    {% if dmx4allFooterToolColumns is not null and dmx4allFooterToolColumns.placement == 'inline' %}
+        {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/columns.html.twig' with {
+            footerTool: dmx4allFooterToolColumns
+        } %}
+
+        {# Teile unter der Zeile, die in die Spaltenzeile geholt wurden. block() muss hier stehen, nicht im Include. #}
+        {% for dmx4allMovedKey, dmx4allMovedBlock in {
+            payment: 'layout_footer_payment_logos',
+            shipping: 'layout_footer_shipping_logos',
+            servicemenu: 'layout_footer_service_menu',
+            vat: 'layout_footer_vat',
+            copyright: 'layout_footer_copyright'
+        } %}
+            {% set dmx4allMoved = dmx4allFooterToolColumns.core[dmx4allMovedKey] ?? null %}
+
+            {% if dmx4allMoved is not null and dmx4allMoved.inRow and not dmx4allMoved.hidden %}
+                <div class="footer-column dmx4all-footer-tool__col dmx4all-footer-tool__moved dmx4all-footer-tool__moved--{{ dmx4allMovedKey }} {{ dmx4allMoved.designClass|default('') }}"
+                     style="--dft-order:{{ dmx4allMoved.order }};--dft-span-lg:{{ dmx4allMoved.spanDesktop }};--dft-span-md:{{ dmx4allMoved.spanTablet }};--dft-span-sm:{{ dmx4allMoved.spanMobile }};"
+                     role="listitem">
+                    <div class="{{ dmx4allMovedKey in ['payment', 'shipping'] ? 'footer-logos' : 'footer-bottom' }}">
+                        {% set dmx4allFooterToolMoving = dmx4allMovedKey %}
+                        {{ block(dmx4allMovedBlock) }}
+                        {% set dmx4allFooterToolMoving = '' %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

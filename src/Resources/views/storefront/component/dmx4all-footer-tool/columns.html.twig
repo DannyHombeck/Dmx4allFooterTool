@@ -1,0 +1,39 @@
+{#
+    Position "neben den Standard-Spalten": jeder befuellte Bereich wird eine
+    weitere Spalte in der Footer-Zeile footerColumns. Wo genau, steuert die
+    Position des Bereichs im Layout (CSS order). Leere Bereiche entfallen hier immer, sonst
+    entstuenden Luecken zwischen den Spalten. Die Breite eines Bereichs
+    (span) gilt wie im Raster: Anzahl Spalten oder ganze Zeile.
+
+    Die Spaltenbreite gilt fuer alle Spalten der Zeile, also auch fuer die
+    von Shopware. So stehen z. B. bei 4 Spalten Hotline, Informationen und
+    die eigenen Bereiche gleich breit nebeneinander.
+#}
+{% block dmx4all_footer_tool_columns %}
+    {#
+        Alle Spalten der Zeile - eigene Bereiche und die Standard-Spalten in
+        ihrer display:contents-Huelle - bekommen Reihenfolge (order) und
+        Breite aus CSS-Variablen. Spalten ohne Angaben: Reihenfolge 0, eine Spalte.
+    #}
+    <style>
+        #footerColumns>.footer-column,#footerColumns>.dmx4all-footer-tool__core>.footer-column{flex:0 0 auto;order:var(--dft-order, 0);width:calc(100% * var(--dft-span-sm, 1) / {{ footerTool.columnsMobile }})}
+        @media (min-width:768px){ #footerColumns>.footer-column,#footerColumns>.dmx4all-footer-tool__core>.footer-column{width:calc(100% * var(--dft-span-md, 1) / {{ footerTool.columnsTablet }})}}
+        @media (min-width:992px){ #footerColumns>.footer-column,#footerColumns>.dmx4all-footer-tool__core>.footer-column{width:calc(100% * var(--dft-span-lg, 1) / {{ footerTool.columnsDesktop }})}}
+        #footerColumns>.dmx4all-footer-tool__col{display:flex;flex-direction:column;gap:16px;margin-bottom:24px}
+    </style>
+
+    {% for area in footerTool.areas %}
+        {% if area.items|length > 0 %}
+            {% block dmx4all_footer_tool_column %}
+                <div class="footer-column dmx4all-footer-tool__col dmx4all-footer-tool__area--{{ area.index }} {{ area.designClass }}{% if area.span == 'full' %} is--full{% endif %}"
+                     style="--dft-order:{{ area.order }};--dft-span-lg:{{ area.spanDesktop }};--dft-span-md:{{ area.spanTablet }};--dft-span-sm:{{ area.spanMobile }};"
+                     role="listitem"
+                     aria-label="{{ 'dmx4allFooterTool.areaLabel'|trans({ '%index%': area.index })|e('html_attr') }}">
+                    {% for item in area.items %}
+                        {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/item.html.twig' with { item: item } %}
+                    {% endfor %}
+                </div>
+            {% endblock %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}

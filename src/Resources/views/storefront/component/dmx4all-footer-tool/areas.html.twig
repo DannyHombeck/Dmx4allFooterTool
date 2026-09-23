@@ -1,0 +1,27 @@
+{#
+    DMX4ALL Footer Editor - Bereiche im Footer als eigenes Raster.
+    Jeder Bereich belegt je Geraet spanDesktop/spanTablet/spanMobile Spalten.
+
+    Das CSS (style.html.twig) bindet footer.html.twig einmal je Seite ein;
+    es steht inline, damit kein Theme-Compile noetig ist.
+#}
+{% block dmx4all_footer_tool %}
+    <div class="dmx4all-footer-tool"
+         role="list"
+         style="--dft-cols-lg:{{ footerTool.columnsDesktop }};--dft-cols-md:{{ footerTool.columnsTablet }};--dft-cols-sm:{{ footerTool.columnsMobile }};">
+        {% for area in footerTool.areas %}
+            {% if area.items|length > 0 or not footerTool.hideEmptyAreas %}
+                {% block dmx4all_footer_tool_area %}
+                    <div class="dmx4all-footer-tool__area dmx4all-footer-tool__area--{{ area.index }} {{ area.designClass }}{% if area.span == 'full' %} is--full{% endif %}"
+                         style="--dft-span-lg:{{ area.spanDesktop }};--dft-span-md:{{ area.spanTablet }};--dft-span-sm:{{ area.spanMobile }};"
+                         role="listitem"
+                         aria-label="{{ 'dmx4allFooterTool.areaLabel'|trans({ '%index%': area.index })|e('html_attr') }}">
+                        {% for item in area.items %}
+                            {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/item.html.twig' with { item: item } %}
+                        {% endfor %}
+                    </div>
+                {% endblock %}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{# Gemeinsames CSS, inline damit kein Theme-Compile noetig ist #}
+<style>
+    .dmx4all-footer-tool{display:grid;grid-template-columns:repeat(var(--dft-cols-sm),minmax(0,1fr));gap:24px 32px;padding:32px 0}
+    @media (min-width:768px){.dmx4all-footer-tool{grid-template-columns:repeat(var(--dft-cols-md),minmax(0,1fr))}}
+    @media (min-width:992px){.dmx4all-footer-tool{grid-template-columns:repeat(var(--dft-cols-lg),minmax(0,1fr))}}
+    .dmx4all-footer-tool__area{display:flex;flex-direction:column;gap:16px;min-width:0;grid-column:span var(--dft-span-sm, 1)}
+    @media (min-width:768px){ .dmx4all-footer-tool__area{grid-column:span var(--dft-span-md, 1)}}
+    @media (min-width:992px){ .dmx4all-footer-tool__area{grid-column:span var(--dft-span-lg, 1)}}
+    .dmx4all-footer-tool__text>*:last-child{margin-bottom:0}
+    .dmx4all-footer-tool__image{display:flex}
+    .dmx4all-footer-tool__image.is--center{justify-content:center}
+    .dmx4all-footer-tool__image.is--right{justify-content:flex-end}
+    .dmx4all-footer-tool__box{display:inline-block;max-width:100%}
+    .dmx4all-footer-tool__image img{display:block;max-width:100%;height:auto}
+    .dmx4all-footer-tool__core-items{display:flex;flex-direction:column;gap:16px;margin-top:12px}
+    .dmx4all-footer-tool__core-items:first-child{margin-top:0}
+</style>

@@ -1,0 +1,10 @@
+{
+  "main.js": {
+    "file": "assets/dmx4allfootertool.js",
+    "name": "dmx4allfootertool",
+    "src": "main.js",
+    "isEntry": true,
+    "css": [],
+    "assets": []
+  }
+}

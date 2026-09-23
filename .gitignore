@@ -1,0 +1,8 @@
+# Build-Ausgaben (pack.sh)
+/build/
+
+# Editor / System
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,41 @@
+{
+  "base": "/bundles/dmx4allfootertool/administration/",
+  "entryPoints": {
+    "dmx4allfootertool": {
+      "css": [],
+      "dynamic": [],
+      "js": [
+        "/bundles/dmx4allfootertool/administration/assets/dmx4allfootertool.js"
+      ],
+      "legacy": false,
+      "preload": []
+    },
+    "dmx4all-footer-tool": {
+      "css": [],
+      "dynamic": [],
+      "js": [
+        "/bundles/dmx4allfootertool/administration/assets/dmx4allfootertool.js"
+      ],
+      "legacy": false,
+      "preload": []
+    },
+    "Dmx4allFooterTool": {
+      "css": [],
+      "dynamic": [],
+      "js": [
+        "/bundles/dmx4allfootertool/administration/assets/dmx4allfootertool.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.1.0",
+    7,
+    1,
+    0
+  ],
+  "viteServer": null
+}

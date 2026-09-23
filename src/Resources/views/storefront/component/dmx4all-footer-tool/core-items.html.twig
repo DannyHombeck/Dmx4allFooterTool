@@ -1,0 +1,10 @@
+{# Eigene Elemente in einer Standard-Spalte (Modus "ergaenzen" oder "ersetzen") #}
+{% block dmx4all_footer_tool_core_items %}
+    {% if items|default([])|length > 0 %}
+        <div class="dmx4all-footer-tool__core-items">
+            {% for item in items %}
+                {% sw_include '@Dmx4allFooterTool/storefront/component/dmx4all-footer-tool/item.html.twig' with { item: item } %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
