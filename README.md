@@ -2,7 +2,7 @@
 
 **Der Footer deines Shops – so, wie du ihn haben möchtest.**
 
-Mit dem DMX4ALL Footer Editor gestaltest du den unteren Bereich deines
+Mit dem Shopware Footer Editor gestaltest du den unteren Bereich deines
 Shopware-Shops ganz ohne Programmierkenntnisse. Du legst eigene Bereiche an,
 füllst sie mit Texten und Bildern und ordnest alles per Drag and Drop so an,
 wie es zu deinem Shop passt – nebeneinander, untereinander oder über die
